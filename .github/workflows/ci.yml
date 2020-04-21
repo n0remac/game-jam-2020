@@ -22,11 +22,11 @@ jobs:
         pipenv sync
     - name: Linting
       run: |
-        pip install pycodestyle
+        pipenv run pip install pycodestyle
         # PyCharm sets line length at 120 chars
-        pycodestyle . --count --statistics --max-line-length=120
+        pipenv run pycodestyle . --count --statistics --max-line-length=120
     - name: Test with pytest
       run: |
-        pip install pytest
+        pipenv run pip install pytest
         cd triple-dungeon
-        pytest tests.py
+        pipenv run pytest tests.py
