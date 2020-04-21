@@ -15,7 +15,7 @@ jobs:
         python-version: 3.7
     - name: Install pipenv & sync
       run: |
-        # cd triple-dungeon
+        cd triple-dungeon
         python -m pip install --upgrade pip
         pip install pipenv
         pipenv lock
@@ -28,4 +28,5 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
+        cd triple-dungeon
         pytest tests.py
