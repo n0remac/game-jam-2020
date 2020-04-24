@@ -1,16 +1,17 @@
-'''
+"""
 Recipes are combinations of three monsters. When a player fills a recipe they get an updgrade
-'''
+"""
 
 import arcade
 
 from config import SpritePaths
+from enum import Enum
 
 
-class Recipe():
-    '''
+class Recipe(Enum):
+    """
     A class of different recipes
-    '''
+    """
 
     GHOSTS = ['ghost', 'ghost', 'ghost']
     FROGS = ['frog', 'frog', 'frog']
@@ -19,9 +20,9 @@ class Recipe():
 
 
 class ActiveRecipe(arcade.SpriteList):
-    '''
+    """
     Keeps track of the active recipe and draws it.
-    '''
+    """
 
     def __init__(self):
         super().__init__()
@@ -29,7 +30,6 @@ class ActiveRecipe(arcade.SpriteList):
         self.cycle_recipes = [self.activateFrogs, self.activateGhost]
         self.pos = 0
         self.kill_num = 0
-
 
     def render(self) -> None:
         x = 0
@@ -43,21 +43,16 @@ class ActiveRecipe(arcade.SpriteList):
             x += 70
             sprite.draw()
 
-    def next_recipe(self):
+    def nextRecipe(self):
         self.cycle_recipes[self.pos]()
         self.pos += 1
         if self.pos == len(self.cycle_recipes):
             self.pos = 0
 
-    def add_kill(self, monster_type):
+    def addKill(self, monster_type):
         for sprite in self.sprite_list:
-            if monster_type in "ghost":
-                r, g, b = sprite.color
-                darken = lambda c, s: c * (1 - s)
-                r = darken(r, .5)
-                g = darken(g, .5)
-                b = darken(b, .5)
-                sprite.color = (r, g, b)
+            if monster_type == sprite:
+                sprite.color = tuple(spectrum * 0.5 for spectrum in sprite.color)
                 return
 
     def activateGhost(self) -> None:
