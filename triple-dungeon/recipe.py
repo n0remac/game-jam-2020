@@ -4,8 +4,10 @@ Recipes are combinations of three monsters. When a player fills a recipe they ge
 
 import arcade
 
+from config import SpritePaths
 
-class Recipe:
+
+class Recipe():
     '''
     A class of different recipes
     '''
@@ -24,7 +26,7 @@ class ActiveRecipe(arcade.SpriteList):
     def __init__(self):
         super().__init__()
         self.active = Recipe.GHOSTS
-        self.cycle_recipes = [self.set_frogs, self.set_ghosts]
+        self.cycle_recipes = [self.activateFrogs, self.activateGhost]
         self.pos = 0
         self.kill_num = 0
 
@@ -58,17 +60,16 @@ class ActiveRecipe(arcade.SpriteList):
                 sprite.color = (r, g, b)
                 return
 
-    def set_ghosts(self) -> None:
+    def activateGhost(self) -> None:
+        """
+        Make the 'Ghost' recipe the current active recipe.
+        """
         self.active = Recipe.GHOSTS
-        self.sprite_list = []
-        self.sprite_list.append(arcade.Sprite(filename="resources/images/monsters/ghost/ghost1.png"))
-        self.sprite_list.append(arcade.Sprite(filename="resources/images/monsters/ghost/ghost1.png"))
-        self.sprite_list.append(arcade.Sprite(filename="resources/images/monsters/ghost/ghost1.png"))
-            
+        self.sprite_list = [arcade.Sprite(SpritePaths.GHOST)] * 3
 
-    def set_frogs(self) -> None:
+    def activateFrogs(self) -> None:
+        """
+        Make the 'Frogs' recipe the current active recipe.
+        """
         self.active = Recipe.FROGS
-        self.sprite_list = []
-        self.sprite_list.append(arcade.Sprite(filename="resources/images/monsters/frog/frog1.png"))
-        self.sprite_list.append(arcade.Sprite(filename="resources/images/monsters/frog/frog1.png"))
-        self.sprite_list.append(arcade.Sprite(filename="resources/images/monsters/frog/frog1.png"))
+        self.sprite_list = [arcade.Sprite(SpritePaths.FROG)] * 3
