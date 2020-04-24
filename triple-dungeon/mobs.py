@@ -197,19 +197,18 @@ class Enemy(Mob):
         A on_update function, the Mob should decide it's next actions here.
         """
 
-        curpos, nextpos = self.nearestPosition(), path[1]
-        # print(curpos, nextpos)
+        curPos, nextPos = self.nearestPosition(), path[1] if len(path) > 1 else self.target.position
 
-        if nextpos[0] > curpos[0]:
+        if nextPos[0] > curPos[0]:
             self.change_x = Config.PLAYER_MOVEMENT_SPEED - 3
-        elif nextpos[0] < curpos[0]:
+        elif nextPos[0] < curPos[0]:
             self.change_x = -Config.PLAYER_MOVEMENT_SPEED + 3
         else:
             self.change_x = 0
 
-        if nextpos[1] > curpos[1]:
+        if nextPos[1] > curPos[1]:
             self.change_y = Config.PLAYER_MOVEMENT_SPEED - 3
-        elif nextpos[1] < curpos[1]:
+        elif nextPos[1] < curPos[1]:
             self.change_y = -Config.PLAYER_MOVEMENT_SPEED + 3
         else:
             self.change_y = 0
