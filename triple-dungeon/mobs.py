@@ -14,7 +14,6 @@ from map import Dungeon
 from sprites import PlayerAnimations
 
 class MobHandler(arcade.SpriteList):
-
     def __init__(self):
         super().__init__()
         self.enemy_list = []
@@ -29,7 +28,7 @@ class MobHandler(arcade.SpriteList):
         self.player = player
 
         for count in range(ghost):
-            mob = Enemy(filename="resources/images/monsters/ghost/ghost1.png", dungeon=self.dungeon)
+            mob = Enemy(filename=SpritePaths.GHOST, dungeon=self.dungeon)
             mob.center_x, mob.center_y = random.choice(self.dungeon.levelList).center()
             mob.target = self.player
             mob.scale = 4
@@ -37,7 +36,7 @@ class MobHandler(arcade.SpriteList):
             mob.monster_collisions = arcade.PhysicsEngineSimple(mob, self.active_enemies)
             self.enemy_list.append(mob)
         for count in range(frogs):
-            mob = Enemy(filename="resources/images/monsters/frog/frog1.png", dungeon=self.dungeon)
+            mob = Enemy(filename=SpritePaths.FROG, dungeon=self.dungeon)
             mob.center_x, mob.center_y = random.choice(self.dungeon.levelList).center()
             mob.target = self.player
             mob.scale = 4

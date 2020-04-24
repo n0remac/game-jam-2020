@@ -5,6 +5,8 @@ Organizes classes related to projectiles
 
 import arcade
 
+from config import SpritePaths
+
 
 class Projectile(arcade.Sprite):
     """
@@ -27,7 +29,7 @@ class Temp(Projectile):
     """
     def __init__(self, *args, **kwargs) -> None:
         super(Temp, self).__init__(*args, **kwargs)
-        self.texture = arcade.load_texture("resources/images/monsters/frog/frog1.png")
+        self.texture = arcade.load_texture(SpritePaths.FROG)
         self.speed = 20
         self.scale = 1
         # collision list for who/what to collide with: wall, player, enemy
