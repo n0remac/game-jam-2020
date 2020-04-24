@@ -1,5 +1,5 @@
 """
-Recipes are combinations of three monsters. When a player fills a recipe they get an updgrade
+Recipes are combinations of three monsters. When a player fills a recipe they get an upgrade.
 """
 
 import arcade
@@ -32,6 +32,9 @@ class ActiveRecipe(arcade.SpriteList):
         self.kill_num = 0
 
     def render(self) -> None:
+        """
+        Renders all current Recipe sprites at the top right of the screen in a row.
+        """
         x = 0
         for sprite in self.sprite_list:
             screen_right = arcade.get_viewport()[1] - 100
@@ -43,13 +46,20 @@ class ActiveRecipe(arcade.SpriteList):
             x += 70
             sprite.draw()
 
-    def nextRecipe(self):
+    def nextRecipe(self) -> None:
+        """
+        Iterates to the next recipe in the list.
+        """
         self.cycle_recipes[self.pos]()
         self.pos += 1
         if self.pos == len(self.cycle_recipes):
             self.pos = 0
 
-    def addKill(self, monster_type):
+    def addKill(self, monster_type) -> None:
+        """
+        Adds the kill and darkens the sprite if the monster type matches.
+        :param monster_type: The monster type.
+        """
         for sprite in self.sprite_list:
             if monster_type == sprite:
                 sprite.color = tuple(spectrum * 0.5 for spectrum in sprite.color)

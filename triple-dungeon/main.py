@@ -13,10 +13,9 @@ from typing import Tuple, List
 import arcade
 from config import Config
 from map import Dungeon
-from mobs import Player, MobHandler
+from mobs import Player, MobHandler, Mob
 from projectiles import Temp
 from recipe import ActiveRecipe
-
 
 class FPSCounter:
     def __init__(self):
@@ -56,7 +55,7 @@ class Game(arcade.Window):
         self.prev_keypress = []  # A list that assists with tracking keypress events
         # Used to keep track of our scrolling
         self.view_bottom = self.view_left = 0
-        self.Recipe = []
+        self.recipe = []
         self.enemies_in_range = []
 
         arcade.set_background_color(arcade.color.BLACK)
@@ -71,15 +70,15 @@ class Game(arcade.Window):
         self.dungeon = Dungeon(0, 3)
 
         # Set up recipes
-        self.Recipe = ActiveRecipe()
-        self.Recipe.set_ghosts()
+        self.recipe = ActiveRecipe()
+        self.recipe.activateGhost()
 
         # Set up the player, specifically placing it at these coordinates.
         self.player = Player(self.dungeon)
         self.player.scale = 1
         level = random.choice(self.dungeon.levelList)
         self.player.center_x, self.player.center_y = level.center()
-        self.player.cur_recipe = self.Recipe.active
+        self.player.cur_recipe = self.recipe.active
         self.player.monster_collisions = arcade.PhysicsEngineSimple(self.player, self.dungeon.getWalls())
 
         # Set up monsters
@@ -107,7 +106,7 @@ class Game(arcade.Window):
             self.Mobs.render()
             self.active_enemies.draw()
             self.bullet_list.draw()
-            self.Recipe.render()
+            self.recipe.render()
 
             if Config.DEBUG:
                 x, y = self.player.position
@@ -165,8 +164,8 @@ class Game(arcade.Window):
         elif key == 65307:
             self.close()
         elif key == 65505:
-            self.Recipe.next_recipe()
-            self.player.cur_recipe = self.Recipe.active
+            self.recipe.next_recipe()
+            self.player.cur_recipe = self.recipe.active
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
@@ -273,13 +272,13 @@ class Game(arcade.Window):
 
             # Collision Checks
             hit_list = arcade.check_for_collision_with_list(bullet, self.dungeon.getWalls())
-            enemy_hit_list = arcade.check_for_collision_with_list(bullet, self.active_enemies)
+            enemy_hit_list: List[Mob] = arcade.check_for_collision_with_list(bullet, self.active_enemies)
             # If it did, get rid of the bullet
             if len(hit_list) > 0:
                 bullet.remove_from_sprite_lists()
-            if len(enemy_hit_list):
+            if len(enemy_hit_list) > 0:
                 self.player.add_kill(enemy_hit_list[0].monster_type)
-                self.Recipe.add_kill(enemy_hit_list[0].monster_type)
+                self.recipe.addKill(enemy_hit_list[0].monster_type)
                 enemy_hit_list[0].remove_from_sprite_lists()
                 bullet.remove_from_sprite_lists()
 
