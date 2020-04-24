@@ -7,6 +7,7 @@ Pathfinding will also depend on objects here, and is thus integral to it's funct
 from __future__ import annotations
 
 import json
+import random
 from pprint import pprint
 
 import arcade
@@ -41,9 +42,13 @@ class Dungeon(object):
         # center = Level.load_file(1, 1, 'resources/levels/map1/center.json')
         # side = Level.load_file(2, 1, 'resources/levels/map1/room.json')
 
-        center = "resources/levels/map1/center.json"
+        choices = [
+            "resources/levels/map1/center.json",
+            "resources/levels/map1/other.json"
+        ]
+
         self.levels = [
-            [Level.load_file(x, y, center) for y in range(size)] for x in range(size)
+            [Level.load_file(x, y, random.choice(choices)) for y in range(size)] for x in range(size)
         ]
         self.matrix = [[1 for yy in range(size * 10)] for xx in range(10 * size)]
         for column in self.levels:
@@ -161,6 +166,23 @@ class Level:
         level.wallSprites.move(*level.bottomLeft())
 
         return level
+
+    def randomTile(self, walls=False):
+        """
+        Returns the position of a random tile within the list.
+
+        :param walls: True if tiles with walls are included in the possible choices
+        :return: A tuple position (x, y) of the center of a tile.
+        """
+
+        choices = []
+        for x, col in enumerate(self.structure):
+            for y, item in enumerate(col):
+                if item == ' ' or (walls and item == 'w'):
+                    choices.append((x, y))
+        choice = random.choice(choices)
+        bl = self.bottomLeft()
+        return bl[0] + (choice[0] * Config.TILE_SIZE), bl[1] + (choice[1] * Config.TILE_SIZE)
 
     def bottomLeft(self) -> tuple:
         """
