@@ -17,6 +17,7 @@ from mobs import Player, MobHandler, Mob
 from projectiles import Temp
 from recipe import ActiveRecipe
 
+
 class FPSCounter:
     def __init__(self):
         self.time = time.perf_counter()
@@ -41,27 +42,12 @@ class Game(arcade.Window):
     Main application class.
     """
 
-    def __init__(self):
+    def __init__(self, restart=False):
         # Call the parent class and set up the window
-        super().__init__(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT, Config.SCREEN_TITLE)
+        if not restart:
+            super().__init__(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT, Config.SCREEN_TITLE)
+            arcade.set_background_color(arcade.color.BLACK)
 
-        # Sprite Lists
-        self.enemy_list = None
-        self.active_enemies = []
-        self.bullet_list = None
-        self.player = None
-        # Game Objects
-        self.dungeon = None
-        self.prev_keypress = []  # A list that assists with tracking keypress events
-        # Used to keep track of our scrolling
-        self.view_bottom = self.view_left = 0
-        self.recipe = []
-        self.enemies_in_range = []
-
-        arcade.set_background_color(arcade.color.BLACK)
-
-    def setup(self):
-        """ Set up the game here. Call this function to restart the game. """
         # Create the Sprite lists
         self.fps = FPSCounter()
         self.bullet_list = arcade.SpriteList()
@@ -116,7 +102,7 @@ class Game(arcade.Window):
                 self.player.draw_hit_box()
                 arcade.draw_text(str((x, y)), x - 40, y + 50, arcade.color.WHITE, 15, font_name='Arial')
                 arcade.draw_text(f"FPS: {self.fps.get_fps():3.0f}", self.view_left + 50, self.view_bottom + 30,
-                                arcade.color.WHITE, 16, font_name='Arial')
+                                 arcade.color.WHITE, 16, font_name='Arial')
 
                 # Draw paths for all mobs
                 for mob in self.active_enemies:
@@ -298,7 +284,6 @@ def main() -> None:
     """
 
     window = Game()
-    window.setup()
     arcade.run()
 
 
